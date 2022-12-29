@@ -1,0 +1,26 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.boardBlock {
+    width: 1%;
+    height: 100%;
+    border: 1px solid #000;
+    transition: all 0.1s linear;
+}
+.boardRow {
+    display: flex;
+    flex-direction: row;
+    width:100vw;
+    height: 1vh;
+}
+.boardWrapper{
+    width: 100vw;
+    height: 100vh;
+}
+.boardBlock.active {
+    background-color: #000;
+}
+.boardBlock.inactive {
+    background-color: #FFF;
+}
