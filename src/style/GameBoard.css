@@ -1,6 +1,9 @@
 body {
   margin: 0;
   padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 .boardBlock {
   width: 1%;
@@ -36,6 +39,7 @@ body {
   align-items: center;
   width: 100vw;
   height: 15vh;
+  margin-bottom: 2vh;
 }
 .startButton,
 .resetButton {
