@@ -1,6 +1,6 @@
 import React from "react";
 import "../style/GameBoard.css";
-import boardLayout from "../board"
+import boardLayout from "../board";
 
 class GameBoard extends React.Component {
   constructor(props) {
@@ -13,13 +13,13 @@ class GameBoard extends React.Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(
-      () =>
+    this.interval = setInterval(() => {
+      if (this.state.isRunning === true) {
         this.setState({
           boardState: this.generateBoardState(this.state.boardState),
-        }),
-      100
-    );
+        });
+      }
+    }, 100);
   }
 
   componentWillUnmount() {
@@ -66,23 +66,79 @@ class GameBoard extends React.Component {
     return nextGeneration;
   }
 
+  onBlockClick(row, column) {
+    if (this.state.isRunning === false) {
+      let newBoard = this.state.boardState;
+      newBoard[row][column] = newBoard[row][column] === 1 ? 0 : 1;
+      this.setState({ boardState: newBoard });
+    }
+  }
+  onStartButtonClick() {
+    this.setState({ isRunning: !this.state.isRunning });
+  }
+  onResetButtonClick() {
+    let newBoard = this.state.boardState;
+    for (let i = 0; i < newBoard.length; i++) {
+      for (let j = 0; j < newBoard[i].length; j++) {
+        newBoard[i][j] = 0;
+      }
+    }
+    this.setState({ boardState: newBoard, isRunning: false });
+  }
   render() {
     return (
-      <div className="boardWrapper">
-        {this.state.boardState.map((row) => {
-          return (
-            <div className="boardRow">
-              {row.map((value) => {
-                return value === 1 ? (
-                  <div className="boardBlock active"></div>
-                ) : (
-                  <div className="boardBlock inactive"></div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+      <>
+        <div className="preGameMenu">
+          <h3 className="menuHeading">Welcome to the game of life!</h3>
+          <p className="menuText">
+            While the game is stopped you can choose which block shall be alive
+          </p>
+          <div className="controlsWrapper">
+            <button
+              className="startButton"
+              onClick={() => {
+                this.onStartButtonClick();
+              }}
+            >
+              {this.state.isRunning === false && "Start The Game"}
+              {this.state.isRunning === true && "Stop The Game"}
+            </button>
+            <button
+              className="resetButton"
+              onClick={() => {
+                this.onResetButtonClick();
+              }}
+            >
+              Reset board
+            </button>
+          </div>
+        </div>
+        <div className="boardWrapper">
+          {this.state.boardState.map((row, rowIndex) => {
+            return (
+              <div className="boardRow">
+                {row.map((value, columnIndex) => {
+                  return value === 1 ? (
+                    <div
+                      className="boardBlock active"
+                      onClick={() => {
+                        this.onBlockClick(rowIndex, columnIndex);
+                      }}
+                    ></div>
+                  ) : (
+                    <div
+                      className="boardBlock inactive"
+                      onClick={() => {
+                        this.onBlockClick(rowIndex, columnIndex);
+                      }}
+                    ></div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </>
     );
   }
 }
